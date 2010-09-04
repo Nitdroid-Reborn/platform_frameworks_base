@@ -248,6 +248,7 @@ status_t BootAnimation::readyToRun() {
     mFlingerSurface = s;
 
     mAndroidAnimation = true;
+
     if ((access(USER_BOOTANIMATION_FILE, R_OK) == 0 &&
          mZip.open(USER_BOOTANIMATION_FILE) == NO_ERROR) ||
         (access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0 &&
