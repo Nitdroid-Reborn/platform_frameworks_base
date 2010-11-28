@@ -155,6 +155,20 @@ static int readFromFile(const char* path, char* buf, size_t size)
     return count;
 }
 
+static void setBooleanFieldFromMode(JNIEnv* env, jobject obj, const char* path, jfieldID fieldID)
+{
+    const int SIZE = 16;
+    char buf[SIZE];
+
+    jboolean value = false;
+    if (readFromFile(path, buf, SIZE) > 0) {
+        if (strcmp(buf, "0")) {
+            value = true;
+        }
+    }
+    env->SetBooleanField(obj, fieldID, value);
+}
+
 static void setBooleanField(JNIEnv* env, jobject obj, const char* path, jfieldID fieldID)
 {
     const int SIZE = 16;
@@ -198,7 +212,7 @@ static void setVoltageField(JNIEnv* env, jobject obj, const char* path, jfieldID
 static void android_server_BatteryService_update(JNIEnv* env, jobject obj)
 {
     setBooleanField(env, obj, "/sys/devices/platform/musb_hdrc/charger", gFieldIds.mAcOnline);
-    setBooleanField(env, obj, "/sys/devices/platform/musb_hdrc/connect", gFieldIds.mUsbOnline);
+    setBooleanFieldFromMode(env, obj, "/sys/devices/platform/musb_hdrc/mA", gFieldIds.mUsbOnline);
     setBooleanField(env, obj, gPaths.batteryPresentPath, gFieldIds.mBatteryPresent);
     
     setIntField(env, obj, gPaths.batteryCapacityPath, gFieldIds.mBatteryLevel);
