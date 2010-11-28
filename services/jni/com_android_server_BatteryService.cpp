@@ -197,8 +197,8 @@ static void setVoltageField(JNIEnv* env, jobject obj, const char* path, jfieldID
 
 static void android_server_BatteryService_update(JNIEnv* env, jobject obj)
 {
-    setBooleanField(env, obj, gPaths.acOnlinePath, gFieldIds.mAcOnline);
-    setBooleanField(env, obj, gPaths.usbOnlinePath, gFieldIds.mUsbOnline);
+    setBooleanField(env, obj, "/sys/devices/platform/musb_hdrc/charger", gFieldIds.mAcOnline);
+    setBooleanField(env, obj, "/sys/devices/platform/musb_hdrc/connect", gFieldIds.mUsbOnline);
     setBooleanField(env, obj, gPaths.batteryPresentPath, gFieldIds.mBatteryPresent);
     
     setIntField(env, obj, gPaths.batteryCapacityPath, gFieldIds.mBatteryLevel);
