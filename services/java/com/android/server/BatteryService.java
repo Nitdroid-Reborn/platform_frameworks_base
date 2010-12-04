@@ -130,6 +130,10 @@ class BatteryService extends Binder {
 
         mUEventObserver.startObserving("SUBSYSTEM=power_supply");
 
+        // monitor usb_mass_storage for changes...
+        // USB/AC power_supply generate UEvents in usb_mass_storage
+        mUEventObserver.startObserving("change@/devices/virtual/switch/usb_mass_storage");
+
         // set initial status
         update();
     }
