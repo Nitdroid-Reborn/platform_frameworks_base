@@ -130,6 +130,9 @@ class BatteryService extends Binder {
                 com.android.internal.R.integer.config_lowBatteryCloseWarningLevel);
 
         mUEventObserver.startObserving("SUBSYSTEM=power_supply");
+        // monitor usb_mass_storage for changes...
+        // USB/AC power_supply generate UEvents in usb_mass_storage
+        mUEventObserver.startObserving("change@/devices/virtual/switch/usb_mass_storage");
 
         // set initial status
         update();
