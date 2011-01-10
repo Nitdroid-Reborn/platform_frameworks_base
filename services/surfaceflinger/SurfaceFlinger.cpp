@@ -1919,7 +1919,7 @@ status_t SurfaceFlinger::turnElectronBeamOffImplLocked(int32_t mode)
     glEnable(GL_SCISSOR_TEST);
     hw.flip( Region(hw.bounds()) );
 
-    hw.setCanDraw(false);
+    //hw.setCanDraw(false);
     return NO_ERROR;
 }
 
