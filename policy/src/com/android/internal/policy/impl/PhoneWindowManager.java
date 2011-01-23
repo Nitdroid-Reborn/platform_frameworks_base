@@ -2128,7 +2128,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return mDeskDockRotation;
             } else {
                 if (useSensorForOrientationLp(orientation)) {
-                    int curRotation = mOrientationListener.getCurrentRotation(lastRotation);
+                    int lastRotationFixed = lastRotation == 3 ? 0 : lastRotation + 1;
+                    int curRotation = mOrientationListener.getCurrentRotation(lastRotationFixed);
+                    //Log.d(TAG, "cur/last rotation:" + curRotation + "" + lastRotation);
                     if (curRotation < 0)
                         return lastRotation;
                     if (0 == curRotation)
