@@ -41,8 +41,8 @@ class UsbObserver extends UEventObserver {
     private static final boolean LOG = false;
 
     private static final String USB_CONFIGURATION_MATCH = "DEVPATH=/devices/virtual/switch/usb_configuration";
-    private static final String USB_FUNCTIONS_MATCH = "DEVPATH=/devices/virtual/usb_composite/";
-    private static final String USB_CONFIGURATION_PATH = "/sys/class/switch/usb_configuration/state";
+    private static final String USB_FUNCTIONS_MATCH = "/devices/virtual/switch/usb_mass_storage";
+    private static final String USB_CONFIGURATION_PATH = "/sys/devices/virtual/switch/usb_mass_storage/state";
     private static final String USB_COMPOSITE_CLASS_PATH = "/sys/class/usb_composite";
 
     private static final int MSG_UPDATE = 0;
@@ -78,7 +78,7 @@ class UsbObserver extends UEventObserver {
             String switchState = event.get("SWITCH_STATE");
             if (switchState != null) {
                 try {
-                    int newConfig = Integer.parseInt(switchState);
+                    int newConfig = switchState.equals("online") ? 1 : 0;
                     if (newConfig != mUsbConfig) {
                         mPreviousUsbConfig = mUsbConfig;
                         mUsbConfig = newConfig;
@@ -118,7 +118,7 @@ class UsbObserver extends UEventObserver {
         try {
             FileReader file = new FileReader(USB_CONFIGURATION_PATH);
             int len = file.read(buffer, 0, 1024);
-            mPreviousUsbConfig = mUsbConfig = Integer.valueOf((new String(buffer, 0, len)).trim());
+            mPreviousUsbConfig = mUsbConfig = ((new String(buffer, 0, len)).trim().equals("online")) ? 1 : 0;
 
         } catch (FileNotFoundException e) {
             Slog.w(TAG, "This kernel does not have USB configuration switch support");
@@ -145,6 +145,9 @@ class UsbObserver extends UEventObserver {
         } catch (Exception e) {
             Slog.e(TAG, "" , e);
         }
+
+        mEnabledFunctions.add("adb");
+        mEnabledFunctions.add("mass_storage");
     }
 
     void systemReady() {
