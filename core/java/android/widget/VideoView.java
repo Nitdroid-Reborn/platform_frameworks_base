@@ -26,6 +26,7 @@ import android.media.MediaPlayer;
 import android.media.Metadata;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnInfoListener;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -53,7 +54,6 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     // settable by the client
     private Uri         mUri;
     private Map<String, String> mHeaders;
-    private int         mDuration;
 
     // all possible internal states
     private static final int STATE_ERROR              = -1;
@@ -84,6 +84,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
     private int         mCurrentBufferPercentage;
     private OnErrorListener mOnErrorListener;
+    private OnInfoListener  mOnInfoListener;
     private int         mSeekWhenPrepared;  // recording the seek position while preparing
     private boolean     mCanPause;
     private boolean     mCanSeekBack;
@@ -227,9 +228,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
             mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
-            mDuration = -1;
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
             mMediaPlayer.setOnErrorListener(mErrorListener);
+            mMediaPlayer.setOnInfoListener(mOnInfoListener);
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             mCurrentBufferPercentage = 0;
             mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
@@ -281,6 +282,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 mVideoHeight = mp.getVideoHeight();
                 if (mVideoWidth != 0 && mVideoHeight != 0) {
                     getHolder().setFixedSize(mVideoWidth, mVideoHeight);
+                    requestLayout();
                 }
             }
     };
@@ -455,6 +457,16 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         mOnErrorListener = l;
     }
 
+    /**
+     * Register a callback to be invoked when an informational event
+     * occurs during playback or setup.
+     *
+     * @param l The callback that will be run
+     */
+    public void setOnInfoListener(OnInfoListener l) {
+        mOnInfoListener = l;
+    }
+
     SurfaceHolder.Callback mSHCallback = new SurfaceHolder.Callback()
     {
         public void surfaceChanged(SurfaceHolder holder, int format,
@@ -594,17 +606,12 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         openVideo();
     }
 
-    // cache duration as mDuration for faster access
     public int getDuration() {
         if (isInPlaybackState()) {
-            if (mDuration > 0) {
-                return mDuration;
-            }
-            mDuration = mMediaPlayer.getDuration();
-            return mDuration;
+            return mMediaPlayer.getDuration();
         }
-        mDuration = -1;
-        return mDuration;
+
+        return -1;
     }
 
     public int getCurrentPosition() {

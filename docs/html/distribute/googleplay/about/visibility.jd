@@ -4,7 +4,7 @@ page.metaDescription=
 @jd:body
     
 <div style="float:right;margin:0px 0px 24px 0px;">
-  <img src="{@docRoot}images/gp-tab.png" style="width:420px" style>
+  <img src="{@docRoot}images/gp-tab.png" style="width:420px" alt="" />
 </div>
 
 <p>A billion downloads a month and growing. Get your apps in front of millions
@@ -16,7 +16,7 @@ of users at Google's scale. </p>
 <p>Google Play is the premier store for distributing Android apps. It’s
 preinstalled on more than 400 million devices worldwide, a number growing by
 more than a million every day. Android users have downloaded
-more than <strong style="text-wrap:none;">15 billion apps</strong> from Google
+more than <strong style="text-wrap:none;">25 billion apps</strong> from Google
 Play, growing at a rate of more than 1.5 billion per month.</p>
 
 <p>When you publish on Google Play, you put your apps in front of Android's huge
@@ -112,7 +112,8 @@ popular apps at the top. </p>
 users, right from the Apps and Games home pages. The charts are generated
 several times each day based on recent download activity, keeping them fresh and
 allowing new apps to move upward in the charts. To make the charts as relevant
-as possible for users across the world, they are also country-specific.</p>
+as possible for users across the world, they are also country-specific in
+Google Play's most popular countries.</p>
 
 <p>As your apps get traction and build momentum in downloads and ratings,
 they’ll climb one or more of the top charts and gain even more exposure.</p>

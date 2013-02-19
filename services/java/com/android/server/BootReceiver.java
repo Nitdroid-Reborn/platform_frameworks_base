@@ -20,11 +20,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.IPackageManager;
 import android.os.Build;
 import android.os.DropBoxManager;
 import android.os.FileObserver;
 import android.os.FileUtils;
 import android.os.RecoverySystem;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Downloads;
 import android.util.Slog;
@@ -69,7 +72,15 @@ public class BootReceiver extends BroadcastReceiver {
                     Slog.e(TAG, "Can't log boot events", e);
                 }
                 try {
-                    removeOldUpdatePackages(context);
+                    boolean onlyCore = false;
+                    try {
+                        onlyCore = IPackageManager.Stub.asInterface(ServiceManager.getService(
+                                "package")).isOnlyCoreApps();
+                    } catch (RemoteException e) {
+                    }
+                    if (!onlyCore) {
+                        removeOldUpdatePackages(context);
+                    }
                 } catch (Exception e) {
                     Slog.e(TAG, "Can't remove old update packages", e);
                 }
@@ -88,6 +99,8 @@ public class BootReceiver extends BroadcastReceiver {
         final String headers = new StringBuilder(512)
             .append("Build: ").append(Build.FINGERPRINT).append("\n")
             .append("Hardware: ").append(Build.BOARD).append("\n")
+            .append("Revision: ")
+            .append(SystemProperties.get("ro.revision", "")).append("\n")
             .append("Bootloader: ").append(Build.BOOTLOADER).append("\n")
             .append("Radio: ").append(Build.RADIO).append("\n")
             .append("Kernel: ")

@@ -701,7 +701,7 @@ public class ViewPropertyAnimator {
      *             view.animate().x(0);
      *         }
      *     };
-     *     view.animate().x(200).onEnd(endAction);
+     *     view.animate().x(200).withEndAction(endAction);
      * </pre>
      *
      * @param runnable The action to run when the next animation ends.
@@ -1036,7 +1036,7 @@ public class ViewPropertyAnimator {
             if ((propertyMask & TRANSFORM_MASK) != 0) {
                 mView.mTransformationInfo.mMatrixDirty = true;
                 if (!useDisplayListProperties) {
-                    mView.mPrivateFlags |= View.DRAWN; // force another invalidation
+                    mView.mPrivateFlags |= View.PFLAG_DRAWN; // force another invalidation
                 }
             }
             // invalidate(false) in all cases except if alphaHandled gets set to true

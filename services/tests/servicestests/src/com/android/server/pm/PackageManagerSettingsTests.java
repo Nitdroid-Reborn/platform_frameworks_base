@@ -138,8 +138,8 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
 
         // Write the package files and make sure they're parsed properly the first time
         writeOldFiles();
-        Settings settings = new Settings(getContext().getFilesDir());
-        assertEquals(true, settings.readLPw(null));
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        assertEquals(true, settings.readLPw(null, 0, false));
         assertNotNull(settings.peekPackageLPr(PACKAGE_NAME_3));
         assertNotNull(settings.peekPackageLPr(PACKAGE_NAME_1));
 
@@ -156,12 +156,12 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
     public void testNewPackageRestrictionsFile() {
         // Write the package files and make sure they're parsed properly the first time
         writeOldFiles();
-        Settings settings = new Settings(getContext().getFilesDir());
-        assertEquals(true, settings.readLPw(null));
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        assertEquals(true, settings.readLPw(null, 0, false));
 
         // Create Settings again to make it read from the new files
-        settings = new Settings(getContext().getFilesDir());
-        assertEquals(true, settings.readLPw(null));
+        settings = new Settings(getContext(), getContext().getFilesDir());
+        assertEquals(true, settings.readLPw(null, 0, false));
 
         PackageSetting ps = settings.peekPackageLPr(PACKAGE_NAME_2);
         assertEquals(COMPONENT_ENABLED_STATE_DISABLED_USER, ps.getEnabled(0));
@@ -171,8 +171,8 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
     public void testEnableDisable() {
         // Write the package files and make sure they're parsed properly the first time
         writeOldFiles();
-        Settings settings = new Settings(getContext().getFilesDir());
-        assertEquals(true, settings.readLPw(null));
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        assertEquals(true, settings.readLPw(null, 0, false));
 
         // Enable/Disable a package
         PackageSetting ps = settings.peekPackageLPr(PACKAGE_NAME_1);
